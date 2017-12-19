@@ -37,9 +37,10 @@ builder = Gtk.Builder()
 
 
 class SniffApp(object):
-    appName = 'Sniff'
+    appName = 'Sniff' 2
     appAuthors = ['Zack Cerza <zcerza@redhat.com>',
-                  'David Malcolm <dmalcolm@redhat.com>']
+                  'David Malcolm <dmalcolm@redhat.com>',
+                  'Jiri Prajzner <jprajzne@redhat.com>']
 
     def __init__(self):
         self.builder = builder
