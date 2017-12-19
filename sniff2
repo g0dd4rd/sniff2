@@ -37,7 +37,7 @@ builder = Gtk.Builder()
 
 
 class SniffApp(object):
-    appName = 'Sniff' 2
+    appName = 'Sniff 2'
     appAuthors = ['Zack Cerza <zcerza@redhat.com>',
                   'David Malcolm <dmalcolm@redhat.com>',
                   'Jiri Prajzner <jprajzne@redhat.com>']
@@ -54,7 +54,7 @@ class SniffApp(object):
             #if path == '/':  # in case the path is /bin/sniff
                 #path = '/usr'
             self.builder.add_from_file('/usr/share/dogtail/glade/sniff.ui')
-        self.app = self.builder.get_object(self.appName)
+        self.app = self.builder.get_object('Sniff')
         try:
             self.app.set_icon_from_file('../icons/dogtail-head.svg')
         except Exception:
@@ -354,6 +354,8 @@ class SniffController(object):
 
     def createQuery(self, node, action):
         #node.dump(fileName='/tmp/node-sniff.dump')
+        from queryEditWindow import QueryEditWindow
+        QueryEditWindow()
         validName = node.name
         if node.name == '':
             validName = '""'
