@@ -355,7 +355,8 @@ class SniffController(object):
     def createQuery(self, node, action):
         #node.dump(fileName='/tmp/node-sniff.dump')
         from queryEditWindow import QueryEditWindow
-        QueryEditWindow()
+        qew = QueryEditWindow()
+        qew.fill_text_buffer(self, 'Never be enough to fill me up')
         validName = node.name
         if node.name == '':
             validName = '""'
