@@ -19,13 +19,17 @@ from gi.repository import GLib
 class QueryEditWindow:
     def __init__(self):
         text_view = Gtk.TextView()
-        text_buffer = text_view.get_buffer()
+        self.text_buffer = text_view.get_buffer()
         text_view.show()
 
         scroll_window = Gtk.ScrolledWindow()
         scroll_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         scroll_window.add(text_view)
         scroll_window.show()
+
+        cancel_button = Gtk.Button('Clear query')
+        cancel_button.connect('clicked', self.clear_text_buffer)
+        cancel_button.show()
 
         write_button = Gtk.Button('Write query')
         write_button.connect('clicked', self.write_query)
@@ -34,6 +38,7 @@ class QueryEditWindow:
 
         h_button_box = Gtk.HButtonBox()
         h_button_box.pack_start(write_button, True, True, 0)
+        h_button_box.pack_start(cancel_button, True, True, 0)
         h_button_box.show()
 
         scroll_vbox = Gtk.VBox(False, 0)
@@ -50,8 +55,15 @@ class QueryEditWindow:
         window.show()
 
 
+    def clear_text_buffer(self, widget):
+        self.text_buffer.set_text('', 0)
+
+
     def close_query_edit_window(self, widget):
         Gtk.main_quit()
+
+    def fill_text_buffer(self, widget, content):
+        self.text_buffer.set_text(content, len(content))
 
 
     def write_query(self, widget):
