@@ -18,6 +18,7 @@ from gi.repository import GLib
 
 class QueryEditWindow:
     def __init__(self):
+        self.app_name = 'example-app'
         text_view = Gtk.TextView()
         self.text_buffer = text_view.get_buffer()
         text_view.show()
@@ -31,8 +32,8 @@ class QueryEditWindow:
         cancel_button.connect('clicked', self.clear_text_buffer)
         cancel_button.show()
 
-        write_button = Gtk.Button('Write query')
-        write_button.connect('clicked', self.write_query)
+        write_button = Gtk.Button('Write Behave Steps')
+        write_button.connect('clicked', self.write_behave_steps)
         #write_button.set_flags(Gtk.CAN_DEFAULT)
         write_button.show()
 
@@ -62,12 +63,23 @@ class QueryEditWindow:
     def close_query_edit_window(self, widget):
         Gtk.main_quit()
 
-    def fill_text_buffer(self, widget, content):
+
+    def fill_text_buffer(self, widget, app_name, content):
+        self.app_name = app_name
         self.text_buffer.set_text(content, len(content))
 
 
-    def write_query(self, widget):
-        print('writing dogtail query')
+    def write_behave_steps(self, widget):
+        print('=== writing behave steps ===')
+        import os
+        from os.path import expanduser, join, exists
+        projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.app_name)
+        if not exists(join(projectDir, 'features', 'steps')):
+            os.makedirs(join(projectDir, 'features', 'steps'))
+
+        steps = open(join(projectDir, 'features', 'steps', 'steps.py'), 'wb') #dont forget to change it to 'ab' mode
+        steps.write(self.text_buffer.get_text(self.text_buffer.get_start_iter(), self.text_buffer.get_end_iter(), include_hidden_chars = True))
+        steps.close()
 
 
 def main():
