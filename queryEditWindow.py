@@ -19,6 +19,7 @@ from gi.repository import GLib
 class QueryEditWindow:
     def __init__(self):
         self.app_name = 'example-app'
+
         query_text_view = Gtk.TextView()
         self.query_text_buffer = query_text_view.get_buffer()
         query_text_view.show()
@@ -41,10 +42,34 @@ class QueryEditWindow:
         query_h_button_box.pack_start(query_cancel_button, True, True, 0)
         query_h_button_box.show()
 
+        steps_text_view = Gtk.TextView()
+        self.steps_text_buffer = steps_text_view.get_buffer()
+        steps_text_view.show()
+
+        steps_scroll_window = Gtk.ScrolledWindow()
+        steps_scroll_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        steps_scroll_window.add(steps_text_view)
+        steps_scroll_window.show()
+
+        steps_cancel_button = Gtk.Button('Clear query')
+        steps_cancel_button.connect('clicked', self.clear_steps_text_buffer)
+        steps_cancel_button.show()
+
+        steps_write_button = Gtk.Button('Write Behave Steps')
+        steps_write_button.connect('clicked', self.write_behave_steps)
+        steps_write_button.show()
+
+        steps_h_button_box = Gtk.HButtonBox()
+        steps_h_button_box.pack_start(steps_write_button, True, True, 0)
+        steps_h_button_box.pack_start(steps_cancel_button, True, True, 0)
+        steps_h_button_box.show()
+
         vbox = Gtk.VBox(False, 0)
         vbox.add(query_scroll_window)
-        vbox.show()
         vbox.pack_start(query_h_button_box, False, False, 0)
+        vbox.add(steps_scroll_window)
+        vbox.pack_start(steps_h_button_box, False, False, 0)
+        vbox.show()
 
         window = Gtk.Window()
         window.set_resizable(True)
@@ -59,6 +84,10 @@ class QueryEditWindow:
         self.query_text_buffer.set_text('', 0)
 
 
+    def clear_steps_text_buffer(self, widget):
+        self.steps_text_buffer.set_text('', 0)
+
+
     def close_edit_window(self, widget):
         Gtk.main_quit()
 
@@ -66,6 +95,11 @@ class QueryEditWindow:
     def fill_query_text_buffer(self, widget, app_name, content):
         self.app_name = app_name
         self.query_text_buffer.set_text(content, len(content))
+
+
+    def fill_steps_text_buffer(self, widget, app_name, content):
+        self.app_name = app_name
+        self.steps_text_buffer.set_text(content, len(content))
 
 
     def write_dogtail_query(self, widget):
@@ -80,6 +114,10 @@ class QueryEditWindow:
         query.write(self.query_text_buffer.get_text(self.query_text_buffer.get_start_iter(), self.query_text_buffer.get_end_iter(), include_hidden_chars = True))
         query.close()
         print('=== done writing dogtail query ===\n')
+
+
+    def write_behave_steps(self, widget):
+        print('Not implemented yet!')
 
 
 def main():
