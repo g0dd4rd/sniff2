@@ -372,45 +372,25 @@ class SniffController(object):
         #print("node parent type: ", type(node.parent))
         print("get application name: ", self.getApplicationName(node))
 
-        #import os
-        #from os.path import expanduser, join, exists
-        #projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.getApplicationName(node))
-        #if not exists(join(projectDir, 'features', 'steps')):
-            #os.makedirs(join(projectDir, 'features', 'steps'))
-
-        # === STEPS ===
-        #steps = open(join(projectDir, 'features', 'steps', 'steps.py'), 'wb') #dont forget to change it to 'ab' mode 
+        # === QUERY ===
         dogtailQueryContent = ''
         if action == '':
             dogtailQueryContent = "@step(u\'Query \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
                 "def query_"+ validRoleName +"(context, " + node.name.lower() +"):\n" \
                 "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)\n"
-
-            #steps.write("@step(u\'Query \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n")
-            #steps.write("def query_"+ validRoleName +"(context, " + node.name.lower() +"):\n")
-            #steps.write("    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)\n")
         else:
             dogtailQueryContent = "@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
                 "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n" \
                 "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n"
 
-            #steps.write("@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n")
-            #steps.write("def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n")
-            #steps.write("    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n")
 
         dogtailQueryContent += "\n" + "@then(u\'\"{"+ node.name.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n" \
             "def "+ validRoleName +"_is_"+ str(not node.showing).lower() +"(context, "+ node.name.lower() +"):\n" \
             "    print('Not implemented')" + "\n"
 
         qew.fill_query_text_buffer(self, self.getApplicationName(node), dogtailQueryContent)
-        #steps.write("\n")
-        #steps.write("@then(u\'\"{"+ node.name.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n")
-        #steps.write("def "+ validRoleName +"_is_"+ str(not node.showing).lower() +"(context, "+ node.name.lower() +"):\n")
-        #steps.write("    print('Not implemented')")
-        #steps.write("\n")
-        #steps.close()
 
-        # === FEATURE ===
+        # === STEPS ===
         feature = open(join(projectDir, 'features', 'general.feature'), 'wb') #dont forget to change it to 'ab' mode
         feature.write("Feature: General feature\n\n")
         feature.write(    "Background:\n")
