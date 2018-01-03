@@ -391,21 +391,23 @@ class SniffController(object):
         qew.fill_query_text_buffer(self, self.getApplicationName(node), dogtailQueryContent)
 
         # === STEPS ===
-        feature = open(join(projectDir, 'features', 'general.feature'), 'wb') #dont forget to change it to 'ab' mode
-        feature.write("Feature: General feature\n\n")
-        feature.write(    "Background:\n")
-        feature.write("        * Start " + self.getApplicationName(node) + " via command\n\n")
+        behaveFeatureContent = ''
+        behaveFeatureContent = "Feature: General feature\n\n" \
+            "    Background:\n" \
+            "        * Start " + self.getApplicationName(node) + " via command\n\n"
         if action == '':
-            feature.write("@query-"+ validName.lower() +"-"+ validRoleName.replace('_', '-') +"\n")
-            feature.write("    Scenario: Query "+ node.name +" "+ node.roleName +"\n")
-            feature.write("        * Query \""+ node.name +"\" "+ node.roleName +"\n")
+            behaveFeatureContent += "@query-"+ validName.lower() +"-"+ validRoleName.replace('_', '-') +"\n" \
+                "    Scenario: Query "+ node.name +" "+ node.roleName +"\n" \
+                "        * Query \""+ node.name +"\" "+ node.roleName +"\n"
         else:
-            feature.write("@"+ action +"-"+ node.name.lower() +"-"+ node.roleName +"\n")
-            feature.write("    Scenario: "+ action.title() +" "+ node.name +" "+ node.roleName +"\n")
-            feature.write("        * "+ action.title() +" \""+ node.name +"\" "+ node.roleName +"\n")
-        feature.write("        Then \""+ node.name +"\" "+ node.roleName +" is \""+ str(not node.showing) +"\"\n")
-        feature.write("\n")
-        feature.close()
+            behaveFeatureContent += "@"+ action +"-"+ node.name.lower() +"-"+ node.roleName +"\n" \
+                "    Scenario: "+ action.title() +" "+ node.name +" "+ node.roleName +"\n" \
+                "        * "+ action.title() +" \""+ node.name +"\" "+ node.roleName +"\n"
+
+        behaveFeatureContent += "        Then \""+ node.name +"\" "+ node.roleName +" is \""+ str(not node.showing) +"\"\n\n"
+
+        qew.fill_steps_text_buffer(self, self.getApplicationName(node), behaveFeatureContent)
+
 
     def showRelationTarget(self, button, relation, *args):
         target = getattr(self.getSelectedNode(), relation)
