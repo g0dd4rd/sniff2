@@ -10,7 +10,7 @@ sniff2 can be used for:
 
 # Behavior
 - currently, the queryEditorWindow writes:
--- dogtail queries (the actual Python def stubs) into ~/dogtail-behave-projects/${app}/features/steps/steps.py or to example-app if no app is specified
--- behave steps (the actual scenarios for given test(s)) into ~/dogtail-behave-projects/${app}/features/general.feature
--- queryEditorWindow currently *overwrites* the general.feature and steps.py files
+- dogtail queries (the actual Python def stubs) into ~/dogtail-behave-projects/${app}/features/steps/steps.py or to example-app if no app is specified
+- behave steps (the actual scenarios for given test(s)) into ~/dogtail-behave-projects/${app}/features/general.feature
+- queryEditorWindow currently *overwrites* the general.feature and steps.py files
 
