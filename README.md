@@ -5,10 +5,12 @@ sniff2 can be used for:
 - writing GUI tests together with dogtail framework
 
 # 'Installation'
-- make sure you have installed dogtail
+- make sure you have installed dogtail and behave
 - put sniff2 and queryEditWindow into /usr/bin/ or wherever else
 
 # Behavior
-- currently, the queryEditorWindow writes Behave steps definitions (the actual Python def stubs) into ~/dogtail-behave-projects/example-app/features/steps/steps.py if no app is specified
-- queryEditorWindow currently *overwrites* the steps.py file
+- currently, the queryEditorWindow writes:
+-- dogtail queries (the actual Python def stubs) into ~/dogtail-behave-projects/${app}/features/steps/steps.py or to example-app if no app is specified
+-- behave steps (the actual scenarios for given test(s)) into ~/dogtail-behave-projects/${app}/features/general.feature
+-- queryEditorWindow currently *overwrites* the general.feature and steps.py files
 
