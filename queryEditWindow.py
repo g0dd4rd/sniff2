@@ -117,7 +117,17 @@ class QueryEditWindow:
 
 
     def write_behave_steps(self, widget):
-        print('Not implemented yet!')
+        print('=== writing behave steps ===')
+        import os
+        from os.path import expanduser, join, exists
+        projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.app_name)
+        if not exists(join(projectDir, 'features')):
+            os.makedirs(join(projectDir, 'features'))
+
+        steps = open(join(projectDir, 'features', 'general.feature'), 'wb') #dont forget to change it to 'ab' mode
+        steps.write(self.steps_text_buffer.get_text(self.steps_text_buffer.get_start_iter(), self.steps_text_buffer.get_end_iter(), include_hidden_chars = True))
+        steps.close()
+        print('=== done writing behave steps ===\n')
 
 
 def main():
