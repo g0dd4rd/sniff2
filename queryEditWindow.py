@@ -71,13 +71,13 @@ class QueryEditWindow:
         vbox.pack_start(steps_h_button_box, False, False, 0)
         vbox.show()
 
-        window = Gtk.Window()
-        window.set_resizable(True)
-        window.connect('destroy', self.close_edit_window)
-        window.set_title('Dogtail Query - Behave Steps Edit Window')
-        window.set_border_width(0)
-        window.add(vbox)
-        window.show()
+        self.window = Gtk.Window()
+        self.window.set_resizable(True)
+        self.window.connect('destroy', self.close_edit_window)
+        self.window.set_title('Dogtail Query - Behave Steps Edit Window')
+        self.window.set_border_width(0)
+        self.window.add(vbox)
+        self.window.show()
 
 
     def clear_query_text_buffer(self, widget):
@@ -89,7 +89,7 @@ class QueryEditWindow:
 
 
     def close_edit_window(self, widget):
-        Gtk.main_quit()
+        self.window.destroy()
 
 
     def fill_query_text_buffer(self, widget, app_name, content):
