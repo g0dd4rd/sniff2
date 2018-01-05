@@ -7,6 +7,7 @@ sniff2 can be used for:
 # 'Installation'
 - make sure you have installed dogtail and behave
 - put sniff2 and queryEditWindow into /usr/bin/ or wherever else
+- put sniff2.ui into /usr/share/dogtail/glade/ 
 
 # Behavior
 - currently, the queryEditorWindow writes:
