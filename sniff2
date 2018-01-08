@@ -120,7 +120,47 @@ class SniffApp(object):
             window.hide()
 
     def showPreferences(self, *args):
-        print('Not implemented')
+        textView = Gtk.TextView()
+        self.textBuffer = textView.get_buffer()
+        textView.show()
+
+        pathBtn = Gtk.Button('Set Path')
+        pathBtn.connect('clicked', self.setProjectDirPath)
+        pathBtn.show()
+
+        hBtnBox = Gtk.HButtonBox()
+        hBtnBox.pack_start(pathBtn, True, True, 0)
+        hBtnBox.show()
+        
+        vbox = Gtk.VBox(False, 0)
+        vbox.add(textView)
+        vbox.pack_start(hBtnBox, False, False, 0)
+        vbox.show()
+
+        self.window = Gtk.Window()
+        self.window.set_resizable(True)
+        self.window.set_border_width(0)
+        self.window.connect('destroy', self.closePreferences)
+        self.window.set_title('Path to Project Directory')
+        self.window.add(vbox)
+        self.window.show()
+
+    def setProjectDirPath(self, *args):
+        import os
+        from os.path import expanduser, join, exists
+        configPath = join(expanduser('~'), '.config', 'sniff2')
+        if not exists(join(configPath)):
+            os.makedirs(join(configPath))
+
+        configFile = open(join(configPath, 'preferences.csv'), 'wb')
+        #if os.stat(join(configPath, 'preferences.csv')).st_size == 0:
+        configFile.write(self.textBuffer.get_text(self.textBuffer.get_start_iter(), self.textBuffer.get_end_iter(), include_hidden_chars = True))
+
+        configFile.close()
+        
+
+    def closePreferences(self, window):
+        window.destroy()
 
     def quit(self, *args):
         Gtk.main_quit()
