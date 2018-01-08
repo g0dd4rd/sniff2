@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-#import pygtk
-#pygtk.require('2.0')
-#import gtk
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
