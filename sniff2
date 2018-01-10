@@ -122,6 +122,7 @@ class SniffApp(object):
     def showPreferences(self, *args):
         textView = Gtk.TextView()
         self.textBuffer = textView.get_buffer()
+        self.getProjectPath()
         textView.show()
 
         pathBtn = Gtk.Button('Set Path')
@@ -145,6 +146,13 @@ class SniffApp(object):
         self.window.add(vbox)
         self.window.show()
 
+    def getProjectPath(self):
+        import os
+        from os.path import expanduser, join, exists
+        configPath = join(expanduser('~'), '.config', 'sniff2')
+        configFile = open(join(configPath, 'preferences.csv'), 'r')
+        self.textBuffer.set_text(configFile.readline())
+        
     def setProjectDirPath(self, *args):
         import os
         from os.path import expanduser, join, exists
@@ -158,7 +166,6 @@ class SniffApp(object):
 
         configFile.close()
         
-
     def closePreferences(self, window):
         window.destroy()
 
