@@ -16,6 +16,7 @@ from gi.repository import GLib
 class QueryEditWindow:
     def __init__(self):
         self.app_name = 'example-app'
+        self.projectDir = ''
 
         query_text_view = Gtk.TextView()
         self.query_text_buffer = query_text_view.get_buffer()
@@ -98,16 +99,27 @@ class QueryEditWindow:
         self.app_name = app_name
         self.steps_text_buffer.set_text(content, len(content))
 
+    def set_project_dir(self):
+        import os
+        from os.path import expanduser, join, exists
+        
+        if os.stat(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv')).st_size != 0:
+            configFile = open(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv'), 'r')
+            self.projectDir = configFile.readline()
+        else:
+            self.projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.app_name)
+
 
     def write_dogtail_query(self, widget):
         print('=== writing dogtail query ===')
         import os
-        from os.path import expanduser, join, exists
-        projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.app_name)
-        if not exists(join(projectDir, 'features', 'steps')):
-            os.makedirs(join(projectDir, 'features', 'steps'))
+        from os.path import join, exists
+        
+        self.set_project_dir()
+        if not exists(join(self.projectDir, 'features', 'steps')):
+            os.makedirs(join(self.projectDir, 'features', 'steps'))
 
-        query = open(join(projectDir, 'features', 'steps', 'steps.py'), 'wb') #dont forget to change it to 'ab' mode
+        query = open(join(self.projectDir, 'features', 'steps', 'steps.py'), 'wb') #dont forget to change it to 'ab' mode
         query.write(self.query_text_buffer.get_text(self.query_text_buffer.get_start_iter(), self.query_text_buffer.get_end_iter(), include_hidden_chars = True))
         query.close()
         print('=== done writing dogtail query ===\n')
@@ -116,12 +128,13 @@ class QueryEditWindow:
     def write_behave_steps(self, widget):
         print('=== writing behave steps ===')
         import os
-        from os.path import expanduser, join, exists
-        projectDir = join(expanduser('~'), 'dogtail-behave-projects', self.app_name)
-        if not exists(join(projectDir, 'features')):
-            os.makedirs(join(projectDir, 'features'))
+        from os.path import join, exists
+        
+        self.set_project_dir()
+        if not exists(join(self.projectDir, 'features')):
+            os.makedirs(join(self.projectDir, 'features'))
 
-        steps = open(join(projectDir, 'features', 'general.feature'), 'wb') #dont forget to change it to 'ab' mode
+        steps = open(join(self.projectDir, 'features', 'general.feature'), 'wb') #dont forget to change it to 'ab' mode
         steps.write(self.steps_text_buffer.get_text(self.steps_text_buffer.get_start_iter(), self.steps_text_buffer.get_end_iter(), include_hidden_chars = True))
         steps.close()
         print('=== done writing behave steps ===\n')
