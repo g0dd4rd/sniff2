@@ -425,13 +425,21 @@ class SniffController(object):
         print("get application name: ", self.getApplicationName(node))
 
         # === QUERY ===
-        dogtailQueryContent = ''
+        dogtailQueryContent = "from behave import * \n" \
+                              "from common_steps import * \n" \
+                              "from dogtail.rawinput import * \n" \
+                              "from dogtail.tree import * \n" \
+                              "from dogtail.utils import * \n" \
+                              "from pyatspi import * \n" \
+                              "from subprocess import * \n" \
+                              "from time import * \n" \
+                              "import os \n\n" 
         if action == '':
-            dogtailQueryContent = "@step(u\'Query \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
+            dogtailQueryContent += "@step(u\'Query \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
                 "def query_"+ validRoleName +"(context, " + node.name.lower() +"):\n" \
                 "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)\n"
         else:
-            dogtailQueryContent = "@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
+            dogtailQueryContent += "@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
                 "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n" \
                 "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n"
 
