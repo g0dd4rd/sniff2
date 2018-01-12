@@ -440,8 +440,11 @@ class SniffController(object):
                 "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)\n"
         else:
             dogtailQueryContent += "@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
-                "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n" \
-                "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n"
+                "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n"
+            if node.roleName == 'menu' or node.roleName == 'menu item':
+                dogtailQueryContent += "    GnomeShell().getApplicationMenuItem(\'"+ node.name +"\', 'Quit').parent.click()\n"
+            else:
+                dogtailQueryContent += "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n"
 
 
         dogtailQueryContent += "\n" + "@then(u\'\"{"+ node.name.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n" \
