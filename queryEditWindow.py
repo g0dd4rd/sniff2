@@ -103,6 +103,10 @@ class QueryEditWindow:
         import os
         from os.path import expanduser, join, exists
         
+        if not os.path.exists(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv')):
+            os.makedirs(join(expanduser('~'), '.config', 'sniff2')) 
+            open(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv'), 'a').close()
+
         if os.stat(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv')).st_size != 0:
             configFile = open(join(expanduser('~'), '.config', 'sniff2', 'preferences.csv'), 'r')
             self.projectDir = configFile.readline()
