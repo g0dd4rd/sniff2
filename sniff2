@@ -379,6 +379,11 @@ class SniffController(object):
             menuItem2.show()
             self.menu.append(menuItem2)
 
+            menuItem3 = Gtk.MenuItem(label='Node dump')
+            menuItem3.connect('activate', self.menuItemActivate, node.dump(fileName='/tmp/'+ node.name +'-sniff.dump'), node, action)
+            menuItem3.show()
+            self.menu.append(menuItem3)
+
             if node.actions:
                 print("node actions: ", node.actions)
                 print("node actions keys: ", node.actions.keys())
