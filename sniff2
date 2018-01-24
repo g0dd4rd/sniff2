@@ -413,6 +413,9 @@ class SniffController(object):
             validName = '""'
             print("valid name: ", validName)
 
+        if validName.__contains__('.'):
+            validName = validName.rpartition('.')[-1]
+
         validRoleName = node.roleName
         if validRoleName.__contains__(' '):
             validRoleName = validRoleName.replace(' ', '_')
@@ -435,20 +438,20 @@ class SniffController(object):
                               "from time import * \n" \
                               "import os \n\n" 
         if action == '':
-            dogtailQueryContent += "@step(u\'Query \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
-                "def query_"+ validRoleName +"(context, " + node.name.lower() +"):\n" \
-                "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)\n"
+            dogtailQueryContent += "@step(u\'Query \"{" + validName.lower() +"}\" " + node.roleName + "\')\n" \
+                "def query_"+ validRoleName +"(context, " + validName.lower() +"):\n" \
+                "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == "+ validName.lower() +" and y.showing)\n"
         else:
-            dogtailQueryContent += "@step(u\'"+ action.title() + " \"{" + node.name.lower() +"}\" " + node.roleName + "\')\n" \
-                "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + node.name.lower() +"):\n"
+            dogtailQueryContent += "@step(u\'"+ action.title() + " \"{" + validName.lower() +"}\" " + node.roleName + "\')\n" \
+                "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + validName.lower() +"):\n"
             if node.roleName == 'menu' or node.roleName == 'menu item':
-                dogtailQueryContent += "    GnomeShell().getApplicationMenuItem(\'"+ node.name +"\', 'Quit').parent.click()\n"
+                dogtailQueryContent += "    GnomeShell().getApplicationMenuItem("+ validName.lower() +", 'Quit').parent.click()\n"
             else:
-                dogtailQueryContent += "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ node.name +"\' and y.showing)[0].click()\n"
+                dogtailQueryContent += "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)[0].click()\n"
 
 
-        dogtailQueryContent += "\n" + "@then(u\'\"{"+ node.name.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n" \
-            "def "+ validRoleName +"_is_"+ str(not node.showing).lower() +"(context, "+ node.name.lower() +"):\n" \
+        dogtailQueryContent += "\n" + "@then(u\'\"{"+ validName.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n" \
+            "def "+ validRoleName +"_is_"+ str(not node.showing).lower() +"(context, "+ validName.lower() +"):\n" \
             "    print('Not implemented')" + "\n"
 
         qew.fill_query_text_buffer(self, self.getApplicationName(node), dogtailQueryContent)
