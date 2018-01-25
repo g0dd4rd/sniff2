@@ -16,7 +16,7 @@ sniff2 can be used for:
 - queryEditorWindow currently *overwrites* the general.feature and steps.py files
 
 # Usage
-Besides what the previous version of dogtail can do, you can right-click on:
+Besides what the previous version of Sniff can do, you can right-click on:
 - any application or any of its nodes to create the dogtail query and behave steps
 - create node dump up to 100 nodes (can be changed via dogtail.config._Config.childrenLimit (int))
 
