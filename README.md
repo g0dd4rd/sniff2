@@ -15,3 +15,10 @@ sniff2 can be used for:
 - behave steps (the actual scenarios for given test(s)) into ~/dogtail-behave-projects/${app}/features/general.feature
 - queryEditorWindow currently *overwrites* the general.feature and steps.py files
 
+# Usage
+Besides what the previous version of dogtail can do, you can right-click on:
+- any application or any of its nodes to create the dogtail query and behave steps
+- create node dump up to 100 nodes (can be changed via dogtail.config._Config.childrenLimit (int))
+
+Open Sniff2 -> Preferences, where you can set custom path for your project(s)
+
