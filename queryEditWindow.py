@@ -17,14 +17,17 @@ class QueryEditWindow:
     def __init__(self):
         self.app_name = 'example-app'
         self.projectDir = ''
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.execute_query_selection_prefix = 'from dogtail.tree import *; from dogtail.utils import *; app = root.application('org.gnome.Polari');' # make it generic
+        self.execute_query_selection_postfix = '[0].blink()'
 
-        query_text_view = Gtk.TextView()
-        self.query_text_buffer = query_text_view.get_buffer()
-        query_text_view.show()
+        self.query_text_view = Gtk.TextView()
+        self.query_text_buffer = self.query_text_view.get_buffer()
+        self.query_text_view.show()
 
         query_scroll_window = Gtk.ScrolledWindow()
         query_scroll_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        query_scroll_window.add(query_text_view)
+        query_scroll_window.add(self.query_text_view)
         query_scroll_window.show()
 
         query_cancel_button = Gtk.Button('Clear query')
@@ -88,6 +91,10 @@ class QueryEditWindow:
 
     def close_edit_window(self, widget):
         self.window.destroy()
+
+    def execute_query_selection(self, widget):
+        from subprocess import Popen
+        Popen(['python', '-c', self.execute_query_selection_prefix + self.query_text_view.get_text() + self.execute_query_selection_postfix])
 
 
     def fill_query_text_buffer(self, widget, app_name, content):
