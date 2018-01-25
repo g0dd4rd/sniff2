@@ -410,7 +410,6 @@ class SniffController(object):
         return app.name
 
     def createQuery(self, node, action):
-        #node.dump(fileName='/tmp/node-sniff.dump')
         from queryEditWindow import QueryEditWindow
         qew = QueryEditWindow()
         validName = node.name
@@ -420,6 +419,9 @@ class SniffController(object):
 
         if validName.__contains__('.'):
             validName = validName.rpartition('.')[-1]
+
+        if validName.__contains__(' '):
+            validName = validName.replace(' ', '')
 
         validRoleName = node.roleName
         if validRoleName.__contains__(' '):
