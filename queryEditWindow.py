@@ -17,9 +17,6 @@ class QueryEditWindow:
     def __init__(self):
         self.app_name = 'example-app'
         self.projectDir = ''
-        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        #self.execute_query_selection_prefix = "from dogtail.tree import *; from dogtail.utils import *; app = root.application(\'"+ self.app_name +"\');" # make it generic
-        #self.execute_query_selection_postfix = '[0].blink()'
 
         self.query_text_view = Gtk.TextView()
         self.query_text_buffer = self.query_text_view.get_buffer()
