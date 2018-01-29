@@ -380,7 +380,7 @@ class SniffController(object):
             self.menu.append(menuItem2)
 
             menuItem3 = Gtk.MenuItem(label='Node dump')
-            menuItem3.connect('activate', self.menuItemActivate, node.dump(fileName='/tmp/'+ node.name +'-sniff.dump'), node, action)
+            menuItem3.connect('activate', self.menuItemActivate, self.createNodeDump, node, action)
             menuItem3.show()
             self.menu.append(menuItem3)
 
@@ -408,6 +408,13 @@ class SniffController(object):
            #print("new node parent: ", appRoleName)
 
         return app.name
+
+    def createNodeDump(self, node, action):
+        print('=== writing node dump ===')
+        import time
+        node.dump(fileName='/tmp/'+ node.name +'-sniff-'+ time.ctime().replace(' ', '-').replace(':', '') +'.dump')
+        print('=== done writing node dump ===')
+
 
     def createQuery(self, node, action):
         from queryEditWindow import QueryEditWindow
