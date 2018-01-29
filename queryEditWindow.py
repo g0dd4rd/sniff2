@@ -18,8 +18,8 @@ class QueryEditWindow:
         self.app_name = 'example-app'
         self.projectDir = ''
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        self.execute_query_selection_prefix = 'from dogtail.tree import *; from dogtail.utils import *; app = root.application('org.gnome.Polari');' # make it generic
-        self.execute_query_selection_postfix = '[0].blink()'
+        #self.execute_query_selection_prefix = "from dogtail.tree import *; from dogtail.utils import *; app = root.application(\'"+ self.app_name +"\');" # make it generic
+        #self.execute_query_selection_postfix = '[0].blink()'
 
         self.query_text_view = Gtk.TextView()
         self.query_text_buffer = self.query_text_view.get_buffer()
@@ -38,8 +38,13 @@ class QueryEditWindow:
         query_write_button.connect('clicked', self.write_dogtail_query)
         query_write_button.show()
 
+        query_execute_button = Gtk.Button('Execute Dogtail Query')
+        query_execute_button.connect('clicked', self.execute_query_selection)
+        query_execute_button.show()
+
         query_h_button_box = Gtk.HButtonBox()
         query_h_button_box.pack_start(query_write_button, True, True, 0)
+        query_h_button_box.pack_start(query_execute_button, True, True, 0)
         query_h_button_box.pack_start(query_cancel_button, True, True, 0)
         query_h_button_box.show()
 
@@ -93,8 +98,12 @@ class QueryEditWindow:
         self.window.destroy()
 
     def execute_query_selection(self, widget):
+        execute_query_selection_prefix = "from dogtail.tree import *; from dogtail.utils import *; app = root.application(\'"+ self.app_name +"\'); app." # make it generic
+        execute_query_selection_postfix = '[0].blink()'
+
         from subprocess import Popen
-        Popen(['python', '-c', self.execute_query_selection_prefix + self.query_text_view.get_text() + self.execute_query_selection_postfix])
+        Popen(['python', '-c', execute_query_selection_prefix + self.query_text_buffer.get_text(self.query_text_buffer.get_selection_bounds()[0], self.query_text_buffer.get_selection_bounds()[1], include_hidden_chars = True) + execute_query_selection_postfix])
+        print(execute_query_selection_prefix + self.query_text_buffer.get_text(self.query_text_buffer.get_selection_bounds()[0], self.query_text_buffer.get_selection_bounds()[1], include_hidden_chars = True) + execute_query_selection_postfix)
 
 
     def fill_query_text_buffer(self, widget, app_name, content):
