@@ -17,6 +17,7 @@ class QueryEditWindow:
     def __init__(self):
         self.app_name = 'example-app'
         self.projectDir = ''
+        self.window_title = 'Dogtail Query - Behave Steps Edit Window'
 
         self.query_text_view = Gtk.TextView()
         self.query_text_buffer = self.query_text_view.get_buffer()
@@ -77,7 +78,6 @@ class QueryEditWindow:
         self.window = Gtk.Window()
         self.window.set_resizable(True)
         self.window.connect('destroy', self.close_edit_window)
-        self.window.set_title('Dogtail Query - Behave Steps Edit Window')
         self.window.set_border_width(0)
         self.window.add(vbox)
         self.window.show()
@@ -105,6 +105,7 @@ class QueryEditWindow:
 
     def fill_query_text_buffer(self, widget, app_name, content):
         self.app_name = app_name
+        self.window.set_title(self.window_title +' - '+ self.app_name)
         self.query_text_buffer.set_text(content, len(content))
 
 
