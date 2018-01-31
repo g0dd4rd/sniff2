@@ -453,8 +453,11 @@ class SniffController(object):
                               "import os \n\n" 
         if action == '':
             dogtailQueryContent += "@step(u\'Query \"{" + validName.lower() +"}\" " + node.roleName + "\')\n" \
-                "def query_"+ validRoleName +"(context, " + validName.lower() +"):\n" \
-                "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == "+ validName.lower() +" and y.showing)\n"
+                "def query_"+ validRoleName +"(context, " + validName.lower() +"):\n"
+            if node.roleName == 'application' or node.roleName == 'frame':
+                dogtailQueryContent += "    context.app.instance.child(roleName = \'"+ node.roleName +"\', name = \'"+ node.name +"\')\n"
+            else:
+                dogtailQueryContent += "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == "+ validName.lower() +" and y.showing)\n"
         else:
             dogtailQueryContent += "@step(u\'"+ action.title() + " \"{" + validName.lower() +"}\" " + node.roleName + "\')\n" \
                 "def "+ action.title().lower() +"_"+ node.roleName +"(context, " + validName.lower() +"):\n"
@@ -462,7 +465,6 @@ class SniffController(object):
                 dogtailQueryContent += "    GnomeShell().getApplicationMenuItem("+ validName.lower() +", 'Quit').parent.click()\n"
             else:
                 dogtailQueryContent += "    context.app.instance.findChildren(lambda y: y.roleName == \'"+ node.roleName +"\' and y.name == \'"+ validName +"\' and y.showing)[0].click()\n"
-
 
         dogtailQueryContent += "\n" + "@then(u\'\"{"+ validName.lower() +"}\" "+ node.roleName +" is \""+ str(not node.showing) +"\"')\n" \
             "def "+ validRoleName +"_is_"+ str(not node.showing).lower() +"(context, "+ validName.lower() +"):\n" \
