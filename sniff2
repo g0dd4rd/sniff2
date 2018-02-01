@@ -409,6 +409,23 @@ class SniffController(object):
 
         return app.name
 
+
+    def getUniqueNodePath(self, node):
+        #from dogtail.predicate import GenericPredicate
+        print('=== start get unique node path ===')
+        while node is not None:
+            if node.roleName == 'application':
+                print(node.name)
+                return
+            else:
+                if len(node.name) > 0 and len(node.roleName) > 0: 
+                    print('node name: ', node.name, ', node role: ', node.roleName)
+                
+                node = node.parent
+
+        return None
+
+
     def createNodeDump(self, node, action):
         print('=== writing node dump ===')
         import time
@@ -417,6 +434,7 @@ class SniffController(object):
 
 
     def createQuery(self, node, action):
+        self.getUniqueNodePath(node)
         from queryEditWindow import QueryEditWindow
         qew = QueryEditWindow()
         validName = node.name
