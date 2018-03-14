@@ -384,6 +384,11 @@ class SniffController(object):
             menuItem3.show()
             self.menu.append(menuItem3)
 
+            menuItem4 = Gtk.MenuItem(label='Unique Path to Node')
+            menuItem4.connect('activate', self.menuItemActivate, self.getUniqueNodePath, node, action)
+            menuItem4.show()
+            self.menu.append(menuItem4)
+
             if node.actions:
                 print("node actions: ", node.actions)
                 print("node actions keys: ", node.actions.keys())
@@ -410,19 +415,22 @@ class SniffController(object):
         return app.name
 
 
-    def getUniqueNodePath(self, node):
+    def getUniqueNodePath(self, node, action):
         #from dogtail.predicate import GenericPredicate
         print('=== start get unique node path ===')
+        uniqueNodeQuery = ''
+        appName = self.getApplicationName(node)
         while node is not None:
-            if node.roleName == 'application':
-                print(node.name)
-                return
-            else:
-                if len(node.name) > 0 and len(node.roleName) > 0: 
-                    print('node name: ', node.name, ', node role: ', node.roleName)
+            if len(node.name) > 0 and len(node.roleName) > 0: 
+                print('node name: ', node.name, ', node role: ', node.roleName)
+                uniqueNodeQuery += node.roleName.replace(' ', '_').lower() +" = context.app.instance.child(nodeName = \'"+ node.name +"\', roleName = \'"+ node.roleName +"\')\n"
                 
-                node = node.parent
+            node = node.parent
 
+        from queryEditWindow import QueryEditWindow
+        qew = QueryEditWindow()
+        qew.fill_query_text_buffer(self, appName, uniqueNodeQuery)
+        qew = None
         return None
 
 
@@ -434,7 +442,7 @@ class SniffController(object):
 
 
     def createQuery(self, node, action):
-        self.getUniqueNodePath(node)
+        #self.getUniqueNodePath(node)
         from queryEditWindow import QueryEditWindow
         qew = QueryEditWindow()
         validName = node.name
